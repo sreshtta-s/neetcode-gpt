@@ -1,13 +1,32 @@
 import numpy as np
 from numpy.typing import NDArray
 
+
 class Solution:
+    def get_derivative(self, model_prediction: NDArray[np.float64], ground_truth: NDArray[np.float64], N: int, X: NDArray[np.float64], desired_weight: int) -> float:
+        # note that N is just len(X)
+        return -2 * np.dot(ground_truth - model_prediction, X[:, desired_weight]) / N
 
     def get_model_prediction(self, X: NDArray[np.float64], weights: NDArray[np.float64]) -> NDArray[np.float64]:
-        s=np.dot(X,weights)
-        return np.round(s,5)
+        return np.squeeze(np.matmul(X, weights))
 
-    def get_error(self, model_prediction: NDArray[np.float64], ground_truth: NDArray[np.float64]) -> float:
-        s=(1/len(model_prediction))*(np.sum((model_prediction - ground_truth)**2))
-        return np.round(s,5)
+    learning_rate = 0.01
+
+    def train_model(
+        self,
+        X: NDArray[np.float64],
+        Y: NDArray[np.float64],
+        num_iterations: int,
+        initial_weights: NDArray[np.float64]
+    ) -> NDArray[np.float64]:
+        
+        for i in range(0,num_iterations):
+            y_pred = self.get_model_prediction(X, initial_weights)
+            for j in range(0,len(initial_weights)):
+                initial_weights[j] = initial_weights[j] - self.learning_rate*self.get_derivative(y_pred,Y, len(X), X,j) 
+        # For each iteration:
+        #   1. Compute predictions with get_model_prediction(X, weights)
+        #   2. For each weight index j, compute gradient with get_derivative()
+        #   3. Update: weights[j] -= learning_rate * gradient
+        return np.round(initial_weights, 5)
         
