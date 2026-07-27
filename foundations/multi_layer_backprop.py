@@ -22,7 +22,7 @@ class Solution:
         loss = np.mean((z2 - y_true) ** 2)
 
         # Backward pass
-        n = len(y_true) if y_true.ndim > 0 else 1
+        n = len(y_true) 
         dz2 = 2 * (z2 - y_true) / n  # dL/dz2
         dW2 = dz2.reshape(-1, 1) @ a1.reshape(1, -1)  # dL/dW2
         db2 = dz2                      # dL/db2
