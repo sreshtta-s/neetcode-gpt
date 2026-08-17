@@ -10,7 +10,7 @@ class Solution:
         # h[0] = np.maximum(np.dot(x,weights[0]+biases[0]))
         for i in range (0,(len(weights)-1)):
       
-            x = np.dot(x,  weights[i]) + biases[i]
+            x = np.dot(x,weights[i]) + biases[i]
 
             x = np.maximum(0, x)
         z = np.dot(x,weights[-1])+biases[-1]
